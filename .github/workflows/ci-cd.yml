@@ -42,7 +42,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: dbt-target  # The artifact name used in previous runs
-        path: target/     # The path to restore the target directory
+        path: target/     # The path to restore the target directory 
 
     - name: Run dbt models (only changed models)
       run: |
