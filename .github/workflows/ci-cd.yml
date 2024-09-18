@@ -50,7 +50,6 @@ jobs:
         fi
         
     - name: Download dbt target directory from previous run
-      if: ${{ steps.check_artifact.outputs.found == 'true' }}
       uses: actions/download-artifact@v3
       with:
         name: dbt-target  # The artifact name used in previous runs
