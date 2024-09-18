@@ -3,7 +3,7 @@ name: Test GitHub Actions
 on:
   push:
     branches:
-      - master  # Change to your branch if needed
+      - master  # Run the workflow on push to 'master'
 
 jobs:
   test:
