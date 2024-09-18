@@ -37,9 +37,20 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install dbt-core dbt-snowflake  # Adjust based on your dbt adapter (e.g., dbt-postgres)
-
+    
+    # Check if the dbt-target artifact exists
+    - name: Check if dbt-target artifact exists
+      id: check_artifact
+      run: |
+        echo "Checking if dbt-target artifact exists..."
+        if curl -s --head --fail "${{ github.server_url }}/${{ github.repository }}/actions/artifacts/${{ github.run_id }}" | grep -q '200 OK'; then
+          echo "::set-output name=found::true"
+        else
+          echo "::set-output name=found::false"
+        fi
         
     - name: Download dbt target directory from previous run
+      if: ${{ steps.check_artifact.outputs.found == 'true' }}
       uses: actions/download-artifact@v3
       with:
         name: dbt-target  # The artifact name used in previous runs
