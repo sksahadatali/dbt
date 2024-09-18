@@ -44,7 +44,6 @@ jobs:
       with:
         name: dbt-target  # The artifact name used in previous runs
         path: target/     # The path to restore the target directory 
-      working-directory: ./iagc  
 
     - name: Run dbt models (only changed models)
       run: |
