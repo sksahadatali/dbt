@@ -27,7 +27,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.11'  # Use Python 3.8 or any other compatible version
+        python-version: '3.8'  # Use Python 3.8 or any other compatible version
 
     - name: Install dbt
       run: |
