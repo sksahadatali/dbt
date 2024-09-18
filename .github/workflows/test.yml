@@ -1,0 +1,17 @@
+name: Test GitHub Actions
+
+on:
+  push:
+    branches:
+      - main  # Change to your branch if needed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Print Hello World
+      run: echo "Hello, World!"
