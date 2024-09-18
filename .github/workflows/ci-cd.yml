@@ -22,10 +22,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.11'  # Use Python 3.8 or any other compatible version
 
@@ -38,7 +38,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install dbt-core dbt-snowflake  # Adjust based on your dbt adapter (e.g., dbt-postgres)
     - name: Download dbt target directory from previous run
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: dbt-target  # The artifact name used in previous runs
         path: target/     # The path to restore the target directory 
@@ -55,7 +55,7 @@ jobs:
       working-directory: ./iagc
 
     - name: Upload dbt target directory
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: dbt-target
         path: iagc/target/
