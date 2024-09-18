@@ -3,11 +3,11 @@ name: CI/CD for dbt Project - Modified Models Only
 on:
   push:
     branches:
-      - master  # Run the workflow on push to the 'master' branch
+      - master  # Trigger the workflow on push to 'master'
     paths:
-      - 'iagc/models/**'           # Trigger only when models in iagc folder change
-      - 'iagc/dbt_project.yml'      # Trigger when the dbt project configuration changes in the iagc folder
-      - 'iagc/macros/**'            # Trigger when macros are modified in the iagc folder
+      - 'iagc/models/**'               # Trigger when models in iagc folder change
+      - 'iagc/dbt_project.yml'          # Trigger when the dbt project configuration changes
+      - 'iagc/macros/**'                # Trigger when macros are modified in the iagc folder
   pull_request:
     branches:
       - master  # Run the workflow for PRs to the 'master' branch
@@ -21,49 +21,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository code
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Step 2: Set up Python (dbt is a Python package)
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.11'  # Use Python 3.8 or any other compatible version
 
-    # Step 3: Install dbt and required packages
+    # Navigate to the iagc directory where dbt_project.yml is located
+    - name: Change to iagc directory
+      run: cd iagc
+
     - name: Install dbt
       run: |
         python -m pip install --upgrade pip
         pip install dbt-core dbt-snowflake  # Adjust based on your dbt adapter (e.g., dbt-postgres)
 
-    # Step 4: Change to the iagc directory
-    - name: Change to iagc directory
-      run: cd iagc
-
-    # Step 5: Download the previous state (target directory) from GitHub artifacts
     - name: Download dbt target directory from previous run
       uses: actions/download-artifact@v2
       with:
         name: dbt-target  # The artifact name used in previous runs
         path: target/     # The path to restore the target directory
 
-    # Step 6: Run dbt models (only changed models and their dependencies)
-    - name: Run dbt models (changed models only)
+    - name: Run dbt models (only changed models)
       run: |
-        dbt deps  # Ensure dependencies are installed
-        dbt seed  # Seed static data (optional, if you use seeds)
-        dbt run --select state:modified+ --state target/  # Run modified models and their dependencies
+        dbt deps
+        dbt seed
+        dbt run --select state:modified+ --state target/
       working-directory: ./iagc
 
-    # Step 7: Run dbt tests (only changed models)
-    - name: Run dbt tests (changed models only)
-      run: dbt test --select state:modified+ --state target/  # Test modified models only
+    - name: Run dbt tests (only changed models)
+      run: dbt test --select state:modified+ --state target/
       working-directory: ./iagc
 
-    # Step 8: Upload the target directory (to track state for the next run)
     - name: Upload dbt target directory
       uses: actions/upload-artifact@v2
       with:
-        name: dbt-target  # The name of the artifact
-        path: iagc/target/  # Upload the target directory from iagc folder
+        name: dbt-target
+        path: iagc/target/
