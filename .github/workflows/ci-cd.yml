@@ -38,10 +38,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install dbt-core dbt-snowflake  # Adjust based on your dbt adapter (e.g., dbt-postgres)
     - name: Download dbt target directory from previous run
+      if: env.found == 'true'
       uses: actions/download-artifact@v3
       with:
         name: dbt-target  # The artifact name used in previous runs
         path: target/     # The path to restore the target directory 
+      working-directory: ./iagc  
 
     - name: Run dbt models (only changed models)
       run: |
