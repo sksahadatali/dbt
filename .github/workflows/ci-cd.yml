@@ -3,14 +3,14 @@ name: CI/CD for dbt Project - Modified Models Only
 on:
   push:
     branches:
-      - main  # Run the workflow on push to the 'main' branch
+      - master  # Run the workflow on push to the 'master' branch
     paths:
       - 'models/**'               # Trigger only when models change
       - 'dbt_project.yml'          # Trigger when the dbt project configuration changes
       - 'macros/**'                # Trigger when macros are modified
   pull_request:
     branches:
-      - main  # Run the workflow for PRs to the 'main' branch
+      - master  # Run the workflow for PRs to the 'master' branch
     paths:
       - 'models/**'
       - 'dbt_project.yml'
